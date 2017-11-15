@@ -1,5 +1,3 @@
-from tg import config
-from tg import hooks
 from tg.configuration import milestones
 
 import logging
