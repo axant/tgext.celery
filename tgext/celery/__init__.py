@@ -10,12 +10,13 @@ log = logging.getLogger('tgext.celery')
 # both when the user plugs the extension manually or through tgext.pluggable
 # What you write here has the same effect as writing it into app_cfg.py
 # So it is possible to plug other extensions you depend on.
-def plugme(configurator, options=None):
+def plugme(configurator, options=None, **kwargs):
     if options is None:
         options = {}
+    options.update(kwargs)
 
     log.info('Setting up tgext.celery extension...')
-    milestones.config_ready.register(SetupExtension(configurator))
+    milestones.config_ready.register(SetupExtension(configurator, options))
 
     # This is required to be compatible with the
     # tgext.pluggable interface
@@ -26,25 +27,18 @@ def plugme(configurator, options=None):
 # where it's granted that .ini configuration file has already been loaded
 # in tg.config but you can still register hooks or other milestones.
 class SetupExtension(object):
-    def __init__(self, configurator):
+    def __init__(self, configurator, options):
         self.configurator = configurator
+        self.celery_config = options.get('celery_config')
 
     def __call__(self):
-        log.info('>>> Public files path is %s' % config['paths']['static_files'])
-        hooks.register('startup', self.on_startup)
-
-        def echo_wrapper_factory(handler, config):
-            def echo_wrapper(controller, environ, context):
-                log.info('Serving: %s' % context.request.path)
-                return handler(controller, environ, context)
-            return echo_wrapper
-
-        # Application Wrappers are much like easier WSGI Middleware
-        # that get a TurboGears context and return a Response object.
-        self.configurator.register_wrapper(echo_wrapper_factory)
+        from tg import config
+        from tg.support.converters import aslist
+        from tg.configuration.utils import coerce_config
+        config['celery_configuration_object'] = (coerce_config(config, 'celery.', {
+            'CELERY_ACCEPT_CONTENT': aslist,
+        }))
+        config['celery_configuration_object'].update(self.celery_config)
 
     def on_startup(self):
         log.info('+ Application Running!')
-
-
-    

@@ -1,7 +1,10 @@
 About tgext.celery
 -------------------------
 
-tgext.celery is a TurboGears2 extension
+tgext.celery is a TurboGears2 extension that integrate celery into a turbogears application
+
+I tested this extension just with the 
+
 
 Installing
 -------------------------------
@@ -25,3 +28,5 @@ or you can use ``tgext.pluggable`` when available::
 
     from tgext.pluggable import plug
     plug(base_config, 'tgext.celery')
+
+

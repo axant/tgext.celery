@@ -26,8 +26,15 @@ setup(
     zip_safe=False,
     install_requires=[
         "TurboGears2 >= 2.3.11",
+        "gearbox",
+        "PasteDeploy",
+        "celery[mongodb]==3.1",
+        "threadpool",
     ],
-    entry_points="""
-    # -*- Entry points: -*-
-    """
+    entry_points={
+        'gearbox.commands': [
+            'celerybeat = tgext.celery.commands:CeleryBeatCommand',
+            'celeryworker = tgext.celery.commands:CeleryWorkerCommand',
+        ],
+    },
 )
