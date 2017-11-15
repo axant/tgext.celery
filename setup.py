@@ -18,7 +18,7 @@ setup(
     keywords='turbogears2.extension',
     author='Vincenzo Castiglia',
     author_email='vincenzo.castiglia@axant.it',
-    url='',
+    url='https://github.com/axant/tgext.celery.git',
     license='MIT',
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     namespace_packages = ['tgext'],
