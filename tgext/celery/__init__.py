@@ -31,10 +31,11 @@ class SetupExtension(object):
 
     def __call__(self):
         from tg import config
-        from tg.support.converters import aslist
+        from tg.support.converters import aslist, asint
         from tg.configuration.utils import coerce_config
         config['celery_configuration_object'] = (coerce_config(config, 'celery.', {
             'CELERY_ACCEPT_CONTENT': aslist,
+            'CELERYD_CONCURRENCY': asint,
         }))
         config['celery_configuration_object'].update(self.celery_config)
 
