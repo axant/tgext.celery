@@ -41,3 +41,5 @@ class SetupExtension(object):
 
     def on_startup(self):
         log.info('+ Application Running!')
+
+from .celery import celery_app

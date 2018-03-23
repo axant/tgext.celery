@@ -72,11 +72,13 @@ here's an example with a task::
 
     from myproject import model
 
-    from tgext.celery.celery import celery_app
+    from tgext.celery import celery_app
 
     import logging
 
     logger = logging.getLogger(__name__)
+
+    celery_app.config_from_object(config['celery_configuration_object'])
 
 
     @celery_app.task(name='delete_unassociated_images')
