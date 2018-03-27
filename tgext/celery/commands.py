@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 from gearbox.command import Command
 from paste.deploy import loadapp
+from webtest import TestApp
 from os import getcwd
 
 from tgext.celery.celery import celery_app
@@ -59,8 +60,10 @@ class CeleryWorkerCommand(Command):
         here_dir = getcwd()
 
         # Load the wsgi app first so that everything is initialized right
-        loadapp(config_name, relative_to=here_dir)
+        wsgiapp = loadapp(config_name, relative_to=here_dir)
 
+        # load celery config
         celery_app.config_from_object(config['celery_configuration_object'])
-        beat = Worker(app=celery_app, logfile=opts.logfile, loglevel=opts.loglevel)
-        beat.start()
+        
+        worker = Worker(app=celery_app, logfile=opts.logfile, loglevel=opts.loglevel)
+        worker.start()

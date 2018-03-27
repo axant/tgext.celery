@@ -34,6 +34,7 @@ class SetupExtension(object):
         from tg.support.converters import aslist, asint
         from tg.configuration.utils import coerce_config
         config['celery_configuration_object'] = (coerce_config(config, 'celery.', {
+            'CELERY_INCLUDE': aslist,
             'CELERY_ACCEPT_CONTENT': aslist,
             'CELERYD_CONCURRENCY': asint,
         }))
