@@ -7,7 +7,7 @@ try:
 except IOError:
     README = ''
 
-version = "0.0.3"
+version = "0.1.0"
 
 setup(
     name='tgext.celery',

@@ -40,8 +40,15 @@ prefixed by ```celery.```::
     celery.CELERYD_POOL = celery.concurrency.threads.TaskPool
     celery.CELERY_INCLUDE = myproject.lib.celery.tasks
     celery.CELERYD_CONCURRENCY = 3
+    celery.WITHOUT_GOSSIP = true
+    celery.WITHOUT_HEARTBEAT = true
+    celery.WITHOUT_MINGLE = true
 
 see http://docs.celeryproject.org/en/3.1/configuration.html#configuration for other options
+
+disabling gossip, heartbeat and mingle can be dono only from the celery worker cli, we added them
+to the configuration. We reccomend to disable them if you aren't using monitoring tools,
+because of a bug: https://github.com/celery/celery/issues/1047 that will fill your db with GBs of messages.
 
 you can pass other options (that override the other in the .ini file) when plugging this extension
 this is convenient because the options in the .ini file aren't evaluated::

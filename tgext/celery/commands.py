@@ -60,10 +60,21 @@ class CeleryWorkerCommand(Command):
         here_dir = getcwd()
 
         # Load the wsgi app first so that everything is initialized right
-        wsgiapp = loadapp(config_name, relative_to=here_dir)
+        loadapp(config_name, relative_to=here_dir)
 
         # load celery config
         celery_app.config_from_object(config['celery_configuration_object'])
-        
-        worker = Worker(app=celery_app, logfile=opts.logfile, loglevel=opts.loglevel)
+
+        without_gossip = config['celery_configuration_object'].get('WITHOUT_GOSSIP', False)
+        without_heartbeat = config['celery_configuration_object'].get('WITHOUT_HEARTBEAT', False)
+        without_mingle = config['celery_configuration_object'].get('WITHOUT_MINGLE', False)
+
+        worker = Worker(
+            app=celery_app,
+            logfile=opts.logfile,
+            loglevel=opts.loglevel,
+            without_gossip=without_gossip,
+            without_heartbeat=without_heartbeat,
+            without_mingle=without_mingle,
+        )
         worker.start()
