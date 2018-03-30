@@ -1,3 +1,7 @@
+from __future__ import absolute_import
+
+from tgext.celery.celery import celery_app
+
 from tg.configuration import milestones
 
 import logging
@@ -42,3 +46,4 @@ class SetupExtension(object):
 
     def on_startup(self):
         log.info('+ Application Running!')
+

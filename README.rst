@@ -79,7 +79,7 @@ here's an example with a task::
 
     from myproject import model
 
-    from tgext.celery import celery_app
+    from tgext.celery.celery import celery_app
 
     import logging
 
