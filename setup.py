@@ -7,7 +7,7 @@ try:
 except IOError:
     README = ''
 
-version = "0.1.1"
+version = "0.1.2"
 
 setup(
     name='tgext.celery',
@@ -28,7 +28,7 @@ setup(
         "TurboGears2 >= 2.3.11",
         "gearbox",
         "PasteDeploy",
-        "celery[mongodb]==3.1",
+        "celery[mongodb]",
         "threadpool",
     ],
     entry_points={

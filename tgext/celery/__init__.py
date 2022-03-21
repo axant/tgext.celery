@@ -1,4 +1,9 @@
 from tg.configuration import milestones
+try:
+    from celery.app.defaults import _TO_NEW_KEY
+except ImportError:
+    _TO_NEW_KEY = []
+
 
 import logging
 log = logging.getLogger('tgext.celery')
@@ -31,14 +36,19 @@ class SetupExtension(object):
 
     def __call__(self):
         from tg import config
-        from tg.support.converters import aslist, asint
+        from tg.support.converters import aslist, asint, asbool
         from tg.configuration.utils import coerce_config
         config['celery_configuration_object'] = (coerce_config(config, 'celery.', {
             'CELERY_INCLUDE': aslist,
             'CELERY_ACCEPT_CONTENT': aslist,
             'CELERYD_CONCURRENCY': asint,
+            'CELERY_EAGER_PROPAGATES_EXCEPTIONS': asbool,
         }))
         config['celery_configuration_object'].update(self.celery_config)
+        for k in list(config['celery_configuration_object'].keys()):
+            if k in _TO_NEW_KEY:
+                config['celery_configuration_object'][_TO_NEW_KEY[k]] = config['celery_configuration_object'][k]
+                del config['celery_configuration_object'][k]
 
     def on_startup(self):
         log.info('+ Application Running!')
